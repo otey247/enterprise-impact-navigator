@@ -24,7 +24,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .bootstrap/part-* | tr -cd 'A-Za-z0-9+/=' | base64 --decode > /tmp/project.tar.gz
+          python - <<'PY'
+          from pathlib import Path
+          import base64
+          import hashlib
+
+          allowed = set(b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=")
+          parts = []
+          for path in sorted(Path('.bootstrap').glob('part-*')):
+              raw = path.read_bytes()
+              clean = bytes(value for value in raw if value in allowed)
+              parts.append(clean)
+              print(path.name, len(raw), len(clean), hashlib.sha256(clean).hexdigest(), clean[:20], clean[-20:])
+
+          payload = b''.join(parts)
+          print('all', len(payload), len(payload) % 4, hashlib.sha256(payload).hexdigest(), payload[-40:])
+          Path('/tmp/project.tar.gz').write_bytes(base64.b64decode(payload, validate=True))
+          PY
           echo "be91f10f618923fa57820491d0ed9a442ec2115d175156991d4fd42107edce55  /tmp/project.tar.gz" | sha256sum --check -
           tar -xzf /tmp/project.tar.gz
           rm -rf .bootstrap
