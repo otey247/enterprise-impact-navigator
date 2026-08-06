@@ -1,0 +1,75 @@
+          <div><div class="action-title">${escapeHtml(item.action)}</div><div class="action-rationale">${escapeHtml(item.rationale)}</div></div>
+          <div class="action-owner">${escapeHtml(item.owner)}<span>${escapeHtml(item.owner_org)} · Due ${escapeHtml(formatDate(item.due))}</span></div>
+        </div>
+      `).join('')}
+    </div>
+  `, `
+    <button class="button button-secondary" type="button" data-export="brief">${icon('file')} Decision brief</button>
+    <button class="button button-secondary" type="button" data-export="tracker">${icon('sheet')} Mitigation tracker</button>
+  `);
+}
+
+function definitionsPanel(report) {
+  return panel('Governed definitions', 'The formulas and owners used for this answer.', `
+    <div class="panel-body definition-grid">
+      ${report.definitions_used.map((definition) => `
+        <div class="definition">
+          <div class="definition-name">${escapeHtml(definition.metric_name || definition.name || definition.metric_id)}</div>
+          <div class="definition-formula">${escapeHtml(definition.formula || definition.definition || 'Governed semantic calculation')}</div>
+          <div class="definition-meta">Owner: ${escapeHtml(definition.owner)} · Scope: ${escapeHtml(definition.scope || definition.business_context || 'Enterprise')}</div>
+        </div>
+      `).join('')}
+    </div>
+  `);
+}
+
+export function impactView(state) {
+  const report = state.report;
+  if (!report) {
+    return `<div class="view-stack">${questionPanel(state)}<section class="panel empty-state">${icon('impact')}<h2>Run an impact scenario</h2><p>Ask about supplier disruption, single-source exposure, or conflicting enterprise metrics to generate a governed cross-domain analysis.</p></section></div>`;
+  }
+  const selectedNode = state.bootstrap.ontology.nodes.find((node) => node.id === state.selectedNodeId);
+  const graph = panel('Impact dependency graph', 'Highlighted nodes and links support the current result.', `
+    <div class="graph-layout">
+      ${graphMarkup({ ontology: state.bootstrap.ontology, focusNodeIds: report.graph_focus?.node_ids, focusEdgeIds: report.graph_focus?.edge_ids, selectedNodeId: state.selectedNodeId, compact: true })}
+      <aside class="entity-inspector" data-entity-inspector>${entityInspectorMarkup(selectedNode, state.bootstrap.ontology)}</aside>
+    </div>
+  `);
+  const summary = `
+    <section class="panel answer-summary">
+      <h2>Decision summary</h2>
+      <p>${escapeHtml(report.direct_answer)}</p>
+      <div class="answer-meta">
+        ${runtimeBadge(state.execution)}
+        ${badge(`${titleCase(report.severity)} severity`, String(report.severity).toLowerCase())}
+        <span class="meta-chip"><strong>Ontology</strong> v${escapeHtml(report.ontology_version)}</span>
+        <span class="meta-chip"><strong>Generated</strong> ${escapeHtml(formatDate(report.generated_at, true))}</span>
+      </div>
+    </section>
+  `;
+  const assumptions = panel('Assumptions and open questions', 'The model makes uncertainty explicit rather than hiding it.', `
+    <div class="panel-body two-column">
+      <div><div class="inspector-type">ASSUMPTIONS</div><div class="plain-list" style="margin-top:12px">${report.assumptions.map((item) => `<div class="plain-list-item">${escapeHtml(item)}</div>`).join('')}</div></div>
+      <div><div class="inspector-type">UNRESOLVED</div><div class="plain-list" style="margin-top:12px">${report.unresolved_questions.map((item) => `<div class="plain-list-item">${escapeHtml(item)}</div>`).join('')}</div></div>
+    </div>
+  `);
+  return `<div class="view-stack">${questionPanel(state)}${reportKpis(report)}${summary}${graph}<div class="two-column">${evidencePanel(report)}${definitionsPanel(report)}</div>${ordersPanel(report)}${actionsPanel(report)}${assumptions}</div>`;
+}
+
+export function ontologyView(state) {
+  const selectedNode = state.bootstrap.ontology.nodes.find((node) => node.id === state.selectedNodeId);
+  const ontology = state.bootstrap.ontology;
+  const stats = [
+    ['Version', ontology.version, 'Effective enterprise model'],
+    ['Entity types', ontology.entity_types.length, 'Canonical classes'],
+    ['Relationships', ontology.relationship_types.length, 'Typed predicates'],
+    ['Nodes', ontology.nodes.length, 'Demonstration entities'],
+    ['Edges', ontology.edges.length, 'Cross-domain dependencies'],
+    ['Effective', formatDate(ontology.effective_date), 'Current model date']
+  ];
+  return `<div class="view-stack">
+    <section class="kpi-grid">${stats.map(([label, value, context]) => `<div class="kpi"><div class="kpi-label">${escapeHtml(label)}</div><div class="kpi-value">${escapeHtml(value)}</div><div class="kpi-context">${escapeHtml(context)}</div></div>`).join('')}</section>
+    ${panel('Enterprise ontology', 'Select a node to inspect provenance, confidence, aliases, and connected relationships.', `
+      <div class="graph-layout">
+        ${graphMarkup({ ontology, selectedNodeId: state.selectedNodeId })}
+        <aside class="entity-inspect

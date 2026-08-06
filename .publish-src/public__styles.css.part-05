@@ -1,0 +1,5 @@
+e-columns: 30px 1fr; }
+  .action-owner { grid-column: 2; text-align: left; }
+  .scenario-row { grid-template-columns: 38px 1fr; }
+  .scenario-category { display: none; }
+}

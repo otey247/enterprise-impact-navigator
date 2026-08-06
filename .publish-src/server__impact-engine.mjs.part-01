@@ -1,0 +1,74 @@
+ithinHorizon(order.promised_date, durationDays)
+  );
+
+  const financeRevenue = affectedOrders.reduce((sum, order) => sum + toNumber(order.committed_revenue), 0);
+  const grossMargin = affectedOrders.reduce((sum, order) => sum + toNumber(order.gross_margin), 0);
+  const penalty = affectedOrders.reduce((sum, order) => sum + toNumber(order.penalty_exposure), 0);
+  const pipeline = data.opportunities
+    .filter((opportunity) => affectedProductIds.includes(opportunity.product_id) && withinHorizon(opportunity.expected_close_date, durationDays))
+    .reduce((sum, opportunity) => sum + toNumber(opportunity.pipeline_value), 0);
+  const salesExposure = financeRevenue + pipeline;
+
+  const customers = indexBy(data.customers, 'customer_id');
+  const products = indexBy(data.products, 'product_id');
+  const plants = indexBy(data.plants, 'plant_id');
+  const contracts = indexBy(data.contracts, 'contract_id');
+
+  const enrichedOrders = affectedOrders.map((order) => ({
+    ...order,
+    committed_revenue: toNumber(order.committed_revenue),
+    gross_margin: toNumber(order.gross_margin),
+    penalty_exposure: toNumber(order.penalty_exposure),
+    customer_name: customers.get(order.customer_id)?.finance_name || customers.get(order.customer_id)?.crm_name,
+    customer_tier: customers.get(order.customer_id)?.strategic_tier,
+    product_name: products.get(order.product_id)?.product_name,
+    plant_name: plants.get(order.plant_id)?.plant_name,
+    contract_name: contracts.get(order.contract_id)?.contract_name,
+    sla_days: toNumber(contracts.get(order.contract_id)?.sla_days)
+  }));
+
+  const evidencePaths = affectedOrders.slice(0, 5).map((order) => buildOrderEvidence(data, order, constrainedParts));
+  const nodeIds = unique(evidencePaths.flatMap((path) => path.steps.map((step) => step.id)));
+  const edgeIds = data.ontology.edges
+    .filter((edge) => nodeIds.includes(edge.source) && nodeIds.includes(edge.target))
+    .map((edge) => edge.id);
+
+  const constrainedSummary = constrainedParts.map((item) => ({
+    part_id: item.part.part_id,
+    part_name: item.part.part_name,
+    disrupted_allocation_pct: toNumber(item.supplierLink.allocation_pct),
+    minimum_inventory_coverage_days: item.minimumCoverage,
+    alternate_status: item.substitute?.approval_status || 'None',
+    alternate_capacity_pct: item.substitute ? toNumber(item.substitute.max_capacity_pct) : 0,
+    residual_exposure_pct: item.residualAllocation
+  }));
+
+  return {
+    report_id: randomUUID(),
+    scenario_id: durationDays === 60 ? 'supplier-disruption-60' : 'supplier-disruption-30',
+    generated_at: new Date().toISOString(),
+    question,
+    direct_answer: `A ${durationDays}-day outage at Nova Components' Monterrey site puts ${displayMoney(financeRevenue)} of confirmed revenue and ${displayMoney(grossMargin)} of gross margin at risk across ${affectedOrders.length} confirmed orders. Sales reports ${displayMoney(salesExposure)} because its definition also includes ${displayMoney(pipeline)} of qualified pipeline.`,
+    ontology_version: data.ontology.version,
+    severity: durationDays >= 60 ? 'Critical' : 'High',
+    metrics: [
+      { id: 'finance-revenue', label: 'Finance revenue at risk', value: money(financeRevenue), format: 'currency', definition_id: 'METRIC-REV-FIN', context: 'Confirmed orders within horizon' },
+      { id: 'sales-exposure', label: 'Sales exposure', value: money(salesExposure), format: 'currency', definition_id: 'METRIC-REV-SALES', context: 'Confirmed revenue plus qualified pipeline' },
+      { id: 'gross-margin', label: 'Gross margin at risk', value: money(grossMargin), format: 'currency', definition_id: 'METRIC-MARGIN', context: 'Margin on affected confirmed orders' },
+      { id: 'penalty', label: 'Contract penalty exposure', value: money(penalty), format: 'currency', definition_id: 'METRIC-PENALTY', context: 'Maximum contractual exposure' },
+      { id: 'orders', label: 'Confirmed orders affected', value: affectedOrders.length, format: 'number', context: 'Within disruption horizon' },
+      { id: 'customers', label: 'Customers affected', value: unique(affectedOrders.map((order) => order.customer_id)).length, format: 'number', context: 'Distinct customer accounts' }
+    ],
+    constrained_parts: constrainedSummary,
+    affected_orders: enrichedOrders,
+    evidence_paths: evidencePaths,
+    definitions_used: data.metricDefinitions.filter((definition) =>
+      ['METRIC-REV-FIN', 'METRIC-REV-SALES', 'METRIC-MARGIN', 'METRIC-PENALTY'].includes(definition.metric_id)
+    ),
+    assumptions: [
+      `The disruption begins on the demonstration date, 2026-08-06, and lasts ${durationDays} calendar days.`,
+      'Inventory coverage values are current as of 2026-08-05 and are assumed available for the listed plants.',
+      'Pending alternates do not reduce exposure until their approval status is Approved.',
+      'Penalty exposure is the maximum contractual amount, not a forecast of the amount that will be incurred.'
+    ],
+    unresolved_questions: [

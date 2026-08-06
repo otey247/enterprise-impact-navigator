@@ -1,0 +1,52 @@
+      'Can the Queretaro site add qualified capacity for PART-1048 within the disruption window?',
+      'Can Product Engineering complete emergency validation of PART-1048B before current inventory is exhausted?',
+      'Which customer commitments can be resequenced without creating a contractual breach?'
+    ],
+    recommended_actions: [
+      { priority: 1, action: 'Launch emergency validation for alternate control board PART-1048B.', owner: 'Morgan Ellis', owner_org: 'Product Engineering', due: '2026-08-09', rationale: 'The control board is single-sourced and has only 8 to 16 days of plant coverage.' },
+      { priority: 2, action: 'Rebalance available PART-1048 inventory toward Tier 1 contractual commitments.', owner: 'Dana Kim', owner_org: 'Central Operations', due: '2026-08-07', rationale: 'Acme and P&G represent the largest revenue and penalty exposure.' },
+      { priority: 3, action: 'Confirm surge capacity for the approved PART-2091 alternate.', owner: 'Jordan Chen', owner_org: 'Strategic Procurement', due: '2026-08-08', rationale: 'The approved alternate covers only 30% of demand and does not fully offset the 70% disrupted allocation.' },
+      { priority: 4, action: 'Prepare coordinated Tier 1 customer communication and recovery commitments.', owner: 'Renee Washington', owner_org: 'Commercial Operations', due: '2026-08-10', rationale: 'Strategic customer communication requires an approved mitigation plan and executive sponsor.' }
+    ],
+    graph_focus: { node_ids: nodeIds, edge_ids: edgeIds }
+  };
+}
+
+function metricConflictReport(question) {
+  const base = supplierDisruptionReport(question, 30);
+  const finance = base.metrics.find((metric) => metric.id === 'finance-revenue').value;
+  const sales = base.metrics.find((metric) => metric.id === 'sales-exposure').value;
+  const difference = sales - finance;
+  return {
+    ...base,
+    scenario_id: 'metric-conflict',
+    severity: 'Medium',
+    direct_answer: `Both values are correct within their governed contexts. Finance reports ${displayMoney(finance)} because it counts confirmed customer revenue due within the disruption horizon. Sales reports ${displayMoney(sales)} because it adds ${displayMoney(difference)} of qualified pipeline for affected products. Use the Finance definition for booked financial exposure and the Sales definition for commercial relationship planning.`,
+    metrics: [
+      { id: 'finance-revenue', label: 'Finance definition', value: money(finance), format: 'currency', definition_id: 'METRIC-REV-FIN', context: 'Confirmed orders only' },
+      { id: 'sales-exposure', label: 'Sales definition', value: money(sales), format: 'currency', definition_id: 'METRIC-REV-SALES', context: 'Confirmed orders plus pipeline' },
+      { id: 'definition-gap', label: 'Definition gap', value: money(difference), format: 'currency', context: 'Qualified pipeline included by Sales' }
+    ],
+    recommended_actions: [
+      { priority: 1, action: 'Display the metric owner and formula beside every revenue-at-risk value.', owner: 'Data Governance', owner_org: 'Enterprise Data Office', due: '2026-08-14', rationale: 'The same label currently represents two valid but different calculations.' },
+      { priority: 2, action: 'Adopt Finance Revenue at Risk as the executive financial metric.', owner: 'Dana Kim', owner_org: 'Central Operations', due: '2026-08-14', rationale: 'It is limited to confirmed customer commitments and avoids mixing pipeline with booked exposure.' },
+      { priority: 3, action: 'Retain Sales Exposure as a separate commercial-planning metric.', owner: 'Renee Washington', owner_org: 'Commercial Operations', due: '2026-08-14', rationale: 'The broader measure remains valuable for relationship and pipeline intervention.' }
+    ]
+  };
+}
+
+function singleSourceReport(question) {
+  const base = supplierDisruptionReport(question, 30);
+  const singleSource = base.constrained_parts.filter((part) => part.residual_exposure_pct >= 65);
+  const singlePartIds = singleSource.map((part) => part.part_id);
+  const data = loadDemoPackage();
+  const productIds = unique(data.bom.filter((row) => singlePartIds.includes(row.part_id)).map((row) => row.product_id));
+  const orders = base.affected_orders.filter((order) => productIds.includes(order.product_id));
+  const revenue = orders.reduce((sum, order) => sum + order.committed_revenue, 0);
+  return {
+    ...base,
+    scenario_id: 'single-source-exposure',
+    direct_answer: `${singleSource.map((part) => part.part_name).join(', ')} creates the largest single-source exposure. It supports ${productIds.length} products and ${orders.length} confirmed customer commitments representing ${displayMoney(revenue)} within the next 30 days. The available alternate is still pending engineering validation.`,
+    metrics: [
+      { id: 'single-source-parts', label: 'Single-source parts', value: singleSource.length, format: 'number', context: 'No approved full-capacity alternate' },
+      { id: 'dependent-products', label: 'Depe
