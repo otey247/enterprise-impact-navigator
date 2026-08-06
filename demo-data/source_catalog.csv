@@ -1,0 +1,12 @@
+source_id,source_name,domain,system_type,owner,refresh_cadence,record_count,quality_score,last_refresh
+SRC-ERP-ORDERS,ERP Sales Orders,Order Management,ERP,Finance Operations,Hourly,7,96,2026-08-06T07:00:00Z
+SRC-ERP-INVENTORY,ERP Inventory,Inventory,ERP,Supply Chain Operations,Hourly,10,93,2026-08-06T07:00:00Z
+SRC-PROC-SUPPLIERS,Procurement Supplier Master,Procurement,SRM,Strategic Procurement,Daily,4,88,2026-08-06T02:00:00Z
+SRC-PROC-ALLOC,Part Supplier Allocations,Procurement,SRM,Strategic Procurement,Daily,6,90,2026-08-06T02:00:00Z
+SRC-PLM-BOM,Product Bills of Material,Engineering,PLM,Product Engineering,Daily,11,98,2026-08-06T01:30:00Z
+SRC-CRM-CUSTOMERS,CRM Accounts,Commercial,CRM,Commercial Operations,Hourly,5,87,2026-08-06T07:15:00Z
+SRC-CRM-PIPELINE,CRM Opportunities,Commercial,CRM,Commercial Operations,Hourly,4,91,2026-08-06T07:15:00Z
+SRC-LEGAL-CONTRACTS,Contract Repository,Legal,Document Management,Legal and Compliance,Daily,5,84,2026-08-06T03:00:00Z
+SRC-HR-ORG,Organization Directory,Organization,HRIS,People Operations,Daily,8,97,2026-08-06T01:00:00Z
+SRC-SEM-METRICS,Enterprise Metric Catalog,Semantic Governance,Catalog,Data Governance,Weekly,4,92,2026-08-03T12:00:00Z
+SRC-MDM-ALIASES,Master Data Aliases,Master Data,MDM,Data Governance,Daily,6,86,2026-08-06T02:30:00Z

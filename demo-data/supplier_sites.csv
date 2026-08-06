@@ -1,0 +1,6 @@
+site_id,supplier_id,site_name,city,region,country,latitude,longitude,capacity_index,status
+SITE-NOVA-MTY,SUP-001,Monterrey Electronics Campus,Monterrey,Nuevo Leon,Mexico,25.6866,-100.3161,100,Disrupted
+SITE-NOVA-QRO,SUP-001,Queretaro Assembly Center,Queretaro,Queretaro,Mexico,20.5888,-100.3899,45,Active
+SITE-GLE-DET,SUP-002,Detroit Electronics Plant,Detroit,Michigan,United States,42.3314,-83.0458,70,Active
+SITE-PPS-HOU,SUP-003,Houston Polymer Campus,Houston,Texas,United States,29.7604,-95.3698,90,Active
+SITE-RP-STU,SUP-004,Stuttgart Precision Works,Stuttgart,Baden-Wurttemberg,Germany,48.7758,9.1829,80,Active

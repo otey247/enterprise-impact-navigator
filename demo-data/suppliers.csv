@@ -1,0 +1,5 @@
+supplier_id,legal_name,parent_org_id,procurement_name,criticality,risk_score,country,status
+SUP-001,Nova Components Mexico SA,ORG-NOVA-GROUP,Nova MX,Tier 1,78,Mexico,Active
+SUP-002,Great Lakes Electronics LLC,,GLE,Tier 2,34,United States,Active
+SUP-003,Pacific Polymer Solutions Inc,,Pacific Polymer,Tier 2,41,United States,Active
+SUP-004,Rhine Precision GmbH,,Rhine Precision,Tier 1,29,Germany,Active

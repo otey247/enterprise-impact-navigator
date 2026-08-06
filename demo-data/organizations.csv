@@ -1,0 +1,9 @@
+org_id,org_name,org_type,leader_name,leader_role,email
+ORG-NOVA-GROUP,Nova Components Group,External Parent,Lucia Morales,Group President,lucia.morales@example.com
+ORG-OPS-CENTRAL,Central Operations,Internal,Dana Kim,VP Operations,dana.kim@example.com
+ORG-OPS-SOUTH,Southern Operations,Internal,Alex Rivera,Plant Operations Director,alex.rivera@example.com
+ORG-OPS-NORTH,Northern Operations,Internal,Priya Shah,Plant Operations Director,priya.shah@example.com
+ORG-PROCUREMENT,Strategic Procurement,Internal,Jordan Chen,Chief Procurement Officer,jordan.chen@example.com
+ORG-ENGINEERING,Product Engineering,Internal,Morgan Ellis,VP Product Engineering,morgan.ellis@example.com
+ORG-COMMERCIAL,Commercial Operations,Internal,Renee Washington,Chief Commercial Officer,renee.washington@example.com
+ORG-LEGAL,Legal and Compliance,Internal,Taylor Nguyen,General Counsel,taylor.nguyen@example.com

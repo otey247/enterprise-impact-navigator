@@ -1,0 +1,4 @@
+plant_id,plant_name,city,region,country,owner_org_id
+PLANT-STL,St. Louis Operations Center,St. Louis,Missouri,United States,ORG-OPS-CENTRAL
+PLANT-DAL,Dallas Manufacturing Campus,Dallas,Texas,United States,ORG-OPS-SOUTH
+PLANT-CLE,Cleveland Precision Plant,Cleveland,Ohio,United States,ORG-OPS-NORTH

@@ -1,0 +1,6 @@
+part_id,part_name,part_family,unit_of_measure,daily_demand,lead_time_days,criticality
+PART-1048,Circuit Control Board,Electronics,EA,80,45,Critical
+PART-2091,Optical Sensor Array,Electronics,EA,60,30,Critical
+PART-3300,Polymer Housing,Mechanical,EA,100,18,Standard
+PART-4110,Precision Motor Assembly,Mechanical,EA,40,40,Critical
+PART-5520,Packaging Kit,Packaging,EA,120,7,Standard
