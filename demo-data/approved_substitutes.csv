@@ -1,0 +1,3 @@
+substitute_id,part_id,alternate_part_id,alternate_supplier_id,approval_status,readiness_days,max_capacity_pct,blocking_policy,owner_org_id
+SUB-001,PART-1048,PART-1048B,SUP-002,Pending Engineering Validation,21,65,POL-ALT-001,ORG-ENGINEERING
+SUB-002,PART-2091,PART-2091B,SUP-002,Approved,7,30,POL-CAP-002,ORG-PROCUREMENT

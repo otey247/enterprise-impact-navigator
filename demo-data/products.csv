@@ -1,0 +1,5 @@
+product_id,product_name,product_family,list_price,gross_margin_pct,business_unit
+PROD-ALPHA,Industrial Flow Controller,Industrial Automation,5200,36,Controls
+PROD-BETA,Smart Filtration Hub,Water Systems,7800,41,Filtration
+PROD-GAMMA,Precision Dispensing Unit,Advanced Manufacturing,6200,38,Dispensing
+PROD-DELTA,Remote Monitoring Gateway,Digital Services,4400,52,Digital

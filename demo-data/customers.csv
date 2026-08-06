@@ -1,0 +1,6 @@
+customer_id,crm_name,finance_name,segment,strategic_tier,region,account_owner
+CUST-ACME,Acme Industrial,Acme Industrial Holdings,Industrial,Tier 1,North America,Dana Patel
+CUST-PG,P&G,Procter & Gamble Co.,Consumer Products,Tier 1,North America,Marcus Lee
+CUST-MERCY,Mercy Health Systems,Mercy Health,Healthcare,Tier 2,North America,Elena Ortiz
+CUST-NORTH,Northstar Manufacturing,Northstar Mfg,Industrial,Tier 2,North America,Samuel Brooks
+CUST-ORBIT,Orbit Waterworks,Orbit Waterworks Ltd,Utilities,Tier 3,North America,Nia Johnson

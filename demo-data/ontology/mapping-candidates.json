@@ -1,0 +1,96 @@
+{
+  "mapping_candidates": [
+    {
+      "id": "MAP-001",
+      "entity_type": "Supplier",
+      "source_system": "Procurement",
+      "source_value": "Nova MX",
+      "proposed_canonical_id": "SUP-001",
+      "proposed_label": "Nova Components Mexico SA",
+      "confidence": 0.97,
+      "evidence": [
+        "Tax identifier match",
+        "Monterrey address match",
+        "Procurement vendor ID V-00491"
+      ],
+      "risk": "Low",
+      "status": "Proposed"
+    },
+    {
+      "id": "MAP-002",
+      "entity_type": "Supplier",
+      "source_system": "Contracts",
+      "source_value": "Nova Components Group",
+      "proposed_canonical_id": "ORG-NOVA-GROUP",
+      "proposed_label": "Nova Components Group",
+      "confidence": 0.82,
+      "evidence": [
+        "Parent name on master agreement",
+        "Different legal registration",
+        "Shared corporate domain"
+      ],
+      "risk": "High",
+      "status": "Needs Review"
+    },
+    {
+      "id": "MAP-003",
+      "entity_type": "Customer",
+      "source_system": "CRM",
+      "source_value": "P&G",
+      "proposed_canonical_id": "CUST-PG",
+      "proposed_label": "Procter & Gamble Co.",
+      "confidence": 0.99,
+      "evidence": [
+        "CRM account ID match",
+        "Billing domain match"
+      ],
+      "risk": "Low",
+      "status": "Proposed"
+    },
+    {
+      "id": "MAP-004",
+      "entity_type": "Part",
+      "source_system": "Legacy ERP",
+      "source_value": "CB-1048",
+      "proposed_canonical_id": "PART-1048",
+      "proposed_label": "Circuit Control Board",
+      "confidence": 0.95,
+      "evidence": [
+        "Supersession record",
+        "Identical engineering drawing"
+      ],
+      "risk": "Medium",
+      "status": "Proposed"
+    },
+    {
+      "id": "MAP-005",
+      "entity_type": "Metric",
+      "source_system": "Sales",
+      "source_value": "Revenue at Risk",
+      "proposed_canonical_id": "METRIC-REV-SALES",
+      "proposed_label": "Sales Revenue at Risk",
+      "confidence": 0.93,
+      "evidence": [
+        "Formula includes qualified pipeline",
+        "Owned by Commercial Operations"
+      ],
+      "risk": "High",
+      "status": "Needs Review"
+    },
+    {
+      "id": "MAP-006",
+      "entity_type": "Metric",
+      "source_system": "Finance",
+      "source_value": "Revenue at Risk",
+      "proposed_canonical_id": "METRIC-REV-FIN",
+      "proposed_label": "Finance Revenue at Risk",
+      "confidence": 0.99,
+      "evidence": [
+        "Formula limited to confirmed orders",
+        "Used in executive forecast"
+      ],
+      "risk": "Medium",
+      "status": "Proposed"
+    }
+  ]
+}

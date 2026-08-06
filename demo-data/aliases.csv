@@ -1,0 +1,7 @@
+alias_id,entity_type,source_system,source_value,canonical_id,confidence,review_status,notes
+ALIAS-001,Supplier,Procurement,Nova MX,SUP-001,0.97,Proposed,Strong address and tax identifier match
+ALIAS-002,Supplier,Contracts,Nova Components Group,ORG-NOVA-GROUP,0.82,Needs Review,Parent organization and legal supplier must remain distinct
+ALIAS-003,Customer,CRM,P&G,CUST-PG,0.99,Proposed,Exact domain and account identifier match
+ALIAS-004,Customer,Finance,Procter and Gamble Co.,CUST-PG,0.98,Proposed,Normalized punctuation and legal-name match
+ALIAS-005,Part,Legacy ERP,CB-1048,PART-1048,0.95,Proposed,Approved supersession record
+ALIAS-006,Product,Sales,Flow Controller,PROD-ALPHA,0.91,Proposed,Product family shorthand

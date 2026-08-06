@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Enterprise ontology and impact analysis demonstration powered by Google AI Studio Managed Agents." />
+  <title>Enterprise Impact Navigator</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div id="app" class="app-shell" aria-live="polite">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <div>
+          <div class="brand-name">Impact Navigator</div>
+          <div class="brand-kicker">Enterprise Ontology</div>
+        </div>
+      </div>
+      <nav id="primary-nav" class="primary-nav"></nav>
+      <div class="sidebar-footer">
+        <div class="environment-label">DEMO ENVIRONMENT</div>
+        <div class="environment-value"><span class="status-dot"></span> Synthetic enterprise</div>
+        <div class="environment-meta">Ontology v<span id="sidebar-version">1.0.0</span></div>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div>
+          <p id="page-eyebrow" class="eyebrow">ENTERPRISE DECISION INTELLIGENCE</p>
+          <h1 id="page-title">Overview</h1>
+        </div>
+        <div class="topbar-actions">
+          <div id="capability-status" class="capability-status" aria-label="Runtime capabilities"></div>
+          <button id="command-button" class="button button-secondary" type="button">
+            <span data-icon="search"></span>
+            Ask a question
+            <kbd>⌘ K</kbd>
+          </button>
+        </div>
+      </header>
+
+      <main id="main-content" class="main-content" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <div id="toast-region" class="toast-region" aria-live="assertive"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
