@@ -1,0 +1,95 @@
+name: Capture README screenshots
+
+on:
+  push:
+    branches:
+      - agent/full-enterprise-impact-navigator
+    paths:
+      - ".github/workflows/capture-readme-screenshots.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/full-enterprise-impact-navigator
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install browser tooling
+        run: |
+          npm install --no-save --package-lock=false playwright
+          npx playwright install --with-deps chromium
+
+      - name: Start application
+        run: |
+          node server.mjs > /tmp/enterprise-impact-navigator.log 2>&1 &
+          echo $! > /tmp/enterprise-impact-navigator.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3000/api/bootstrap > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/enterprise-impact-navigator.log
+          exit 1
+
+      - name: Capture application views
+        run: |
+          cat > scripts/.capture-readme-screenshots.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import { mkdir } from 'node:fs/promises';
+
+          await mkdir('docs/screenshots', { recursive: true });
+          const browser = await chromium.launch({ headless: true });
+          const context = await browser.newContext({
+            viewport: { width: 1600, height: 1000 },
+            deviceScaleFactor: 1,
+            reducedMotion: 'reduce'
+          });
+          const page = await context.newPage();
+
+          await page.goto('http://127.0.0.1:3000', { waitUntil: 'networkidle' });
+          await page.getByText('Trace enterprise impact').waitFor();
+          await page.screenshot({ path: 'docs/screenshots/overview.png', animations: 'disabled' });
+
+          await page.locator('[data-nav-view="impact"]').click();
+          await page.getByText('Decision summary').waitFor();
+          await page.evaluate(() => window.scrollTo(0, 0));
+          await page.screenshot({ path: 'docs/screenshots/impact-explorer.png', animations: 'disabled' });
+
+          await page.locator('[data-nav-view="ontology"]').click();
+          await page.getByText('Enterprise ontology').waitFor();
+          await page.evaluate(() => window.scrollTo(0, 0));
+          await page.screenshot({ path: 'docs/screenshots/ontology-graph.png', animations: 'disabled' });
+
+          await page.locator('[data-nav-view="mappings"]').click();
+          await page.getByText('Semantic mapping workbench').waitFor();
+          await page.evaluate(() => window.scrollTo(0, 0));
+          await page.screenshot({ path: 'docs/screenshots/mapping-workbench.png', animations: 'disabled' });
+
+          await browser.close();
+          EOF
+          node scripts/.capture-readme-screenshots.mjs
+          rm scripts/.capture-readme-screenshots.mjs
+
+      - name: Validate project
+        run: npm run validate
+
+      - name: Commit screenshots and remove temporary workflow
+        run: |
+          rm .github/workflows/capture-readme-screenshots.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md docs/screenshots .github/workflows/capture-readme-screenshots.yml
+          git commit -m "Add application screenshots to README"
+          git push origin HEAD:agent/full-enterprise-impact-navigator
