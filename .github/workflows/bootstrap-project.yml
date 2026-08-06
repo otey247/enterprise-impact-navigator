@@ -24,7 +24,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .bootstrap/part-* | base64 --decode > /tmp/project.tar.gz
+          cat .bootstrap/part-* | tr -cd 'A-Za-z0-9+/=' | base64 --decode > /tmp/project.tar.gz
           echo "be91f10f618923fa57820491d0ed9a442ec2115d175156991d4fd42107edce55  /tmp/project.tar.gz" | sha256sum --check -
           tar -xzf /tmp/project.tar.gz
           rm -rf .bootstrap
