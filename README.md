@@ -6,6 +6,31 @@ The primary demonstration question is:
 
 > If Nova Components' Monterrey facility is unavailable for 30 days, which products, plants, customer commitments, contracts, revenue, and owners are affected, and what should we do next?
 
+## Application screenshots
+
+<table>
+  <tr>
+    <td width="50%">
+      <strong>Executive overview</strong><br />
+      <img src="docs/screenshots/overview.png" alt="Enterprise Impact Navigator executive overview showing the ontology operating model, key metrics, and guided scenarios" width="100%" />
+    </td>
+    <td width="50%">
+      <strong>Governed impact analysis</strong><br />
+      <img src="docs/screenshots/impact-explorer.png" alt="Impact Explorer showing supplier disruption metrics, a decision summary, and the dependency graph" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <strong>Enterprise ontology</strong><br />
+      <img src="docs/screenshots/ontology-graph.png" alt="Enterprise ontology view showing typed entities and cross-domain relationships" width="100%" />
+    </td>
+    <td width="50%">
+      <strong>Human governance workbench</strong><br />
+      <img src="docs/screenshots/mapping-workbench.png" alt="Mapping Workbench showing source-to-canonical entity resolution, confidence, risk, and approval decisions" width="100%" />
+    </td>
+  </tr>
+</table>
+
 ## Included
 
 - Dependency-free Node.js server and browser application
