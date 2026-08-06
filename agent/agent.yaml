@@ -1,0 +1,17 @@
+id: enterprise-impact-navigator
+base_agent: antigravity-preview-05-2026
+description: "A governed enterprise ontology agent that resolves business meaning, traces cross-domain dependencies, calculates scenario impact, and produces evidence-backed actions."
+tools:
+  - type: code_execution
+environment:
+  type: remote
+  sources: []
+examples:
+  - title: "Supplier Disruption"
+    prompt: "If Nova Components' Monterrey facility is unavailable for 30 days, what is our exposure?"
+  - title: "Metric Conflict"
+    prompt: "Why does Sales report more revenue at risk than Finance?"
+  - title: "Single-Source Exposure"
+    prompt: "Which strategic customer commitments depend on single-source parts?"
+  - title: "Stress Test"
+    prompt: "What changes if the Monterrey disruption lasts 60 days?"

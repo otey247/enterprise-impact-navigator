@@ -1,0 +1,6 @@
+pandas>=2.2.0
+networkx>=3.3
+rapidfuzz>=3.9
+pydantic>=2.8
+PyYAML>=6.0
+jsonschema>=4.23
