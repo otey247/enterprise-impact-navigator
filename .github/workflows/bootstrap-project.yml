@@ -30,15 +30,29 @@ jobs:
           import hashlib
 
           allowed = set(b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=")
+          expected_first_hash = "f001295f8b32c2d41913070fdbf90bb9fedbaaf2f3356eef3210cb085631a353"
           parts = []
+
           for path in sorted(Path('.bootstrap').glob('part-*')):
               raw = path.read_bytes()
               clean = bytes(value for value in raw if value in allowed)
+
+              if path.name == 'part-00' and hashlib.sha256(clean).hexdigest() != expected_first_hash:
+                  repaired = None
+                  for index in range(len(clean)):
+                      candidate = clean[:index] + clean[index + 1:]
+                      if hashlib.sha256(candidate).hexdigest() == expected_first_hash:
+                          print(f"Repaired duplicated character at part-00 offset {index}")
+                          repaired = candidate
+                          break
+                  if repaired is None:
+                      raise RuntimeError('Unable to repair part-00 to its expected hash')
+                  clean = repaired
+
               parts.append(clean)
-              print(path.name, len(raw), len(clean), hashlib.sha256(clean).hexdigest(), clean[:20], clean[-20:])
+              print(path.name, len(raw), len(clean), hashlib.sha256(clean).hexdigest())
 
           payload = b''.join(parts)
-          print('all', len(payload), len(payload) % 4, hashlib.sha256(payload).hexdigest(), payload[-40:])
           Path('/tmp/project.tar.gz').write_bytes(base64.b64decode(payload, validate=True))
           PY
           echo "be91f10f618923fa57820491d0ed9a442ec2115d175156991d4fd42107edce55  /tmp/project.tar.gz" | sha256sum --check -
