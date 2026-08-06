@@ -1,0 +1,407 @@
+{
+  "ontology_id": "enterprise-impact-navigator-demo",
+  "version": "1.0.0",
+  "effective_date": "2026-08-06",
+  "description": "Cross-domain enterprise ontology for supply-chain impact analysis.",
+  "entity_types": [
+    "Supplier",
+    "SupplierSite",
+    "Part",
+    "Product",
+    "Plant",
+    "SalesOrder",
+    "Customer",
+    "Contract",
+    "Organization",
+    "Metric",
+    "Policy"
+  ],
+  "relationship_types": [
+    "OPERATES_SITE",
+    "SUPPLIES_PART",
+    "COMPONENT_OF",
+    "PRODUCED_AT",
+    "FULFILLS_ORDER",
+    "PLACED_BY",
+    "GOVERNED_BY",
+    "OWNED_BY",
+    "DEFINED_BY",
+    "CONSTRAINED_BY"
+  ],
+  "nodes": [
+    {
+      "id": "SUP-001",
+      "type": "Supplier",
+      "label": "Nova Components Mexico SA",
+      "subtitle": "Tier 1 supplier",
+      "source": "Procurement",
+      "confidence": 0.99,
+      "aliases": [
+        "Nova MX"
+      ]
+    },
+    {
+      "id": "SITE-NOVA-MTY",
+      "type": "SupplierSite",
+      "label": "Monterrey Electronics Campus",
+      "subtitle": "Disrupted site",
+      "source": "Supplier master",
+      "confidence": 1.0
+    },
+    {
+      "id": "SITE-NOVA-QRO",
+      "type": "SupplierSite",
+      "label": "Queretaro Assembly Center",
+      "subtitle": "Alternate Nova site",
+      "source": "Supplier master",
+      "confidence": 1.0
+    },
+    {
+      "id": "PART-1048",
+      "type": "Part",
+      "label": "Circuit Control Board",
+      "subtitle": "Single source",
+      "source": "PLM",
+      "confidence": 1.0,
+      "aliases": [
+        "CB-1048"
+      ]
+    },
+    {
+      "id": "PART-2091",
+      "type": "Part",
+      "label": "Optical Sensor Array",
+      "subtitle": "70% Nova allocation",
+      "source": "PLM",
+      "confidence": 1.0
+    },
+    {
+      "id": "PROD-ALPHA",
+      "type": "Product",
+      "label": "Industrial Flow Controller",
+      "subtitle": "Controls",
+      "source": "PLM",
+      "confidence": 1.0,
+      "aliases": [
+        "Flow Controller"
+      ]
+    },
+    {
+      "id": "PROD-BETA",
+      "type": "Product",
+      "label": "Smart Filtration Hub",
+      "subtitle": "Filtration",
+      "source": "PLM",
+      "confidence": 1.0
+    },
+    {
+      "id": "PROD-GAMMA",
+      "type": "Product",
+      "label": "Precision Dispensing Unit",
+      "subtitle": "Dispensing",
+      "source": "PLM",
+      "confidence": 1.0
+    },
+    {
+      "id": "PLANT-STL",
+      "type": "Plant",
+      "label": "St. Louis Operations Center",
+      "subtitle": "12 days control-board coverage",
+      "source": "ERP",
+      "confidence": 1.0
+    },
+    {
+      "id": "PLANT-DAL",
+      "type": "Plant",
+      "label": "Dallas Manufacturing Campus",
+      "subtitle": "8 days control-board coverage",
+      "source": "ERP",
+      "confidence": 1.0
+    },
+    {
+      "id": "PLANT-CLE",
+      "type": "Plant",
+      "label": "Cleveland Precision Plant",
+      "subtitle": "18 days sensor coverage",
+      "source": "ERP",
+      "confidence": 1.0
+    },
+    {
+      "id": "SO-1001",
+      "type": "SalesOrder",
+      "label": "SO-1001",
+      "subtitle": "$5.2M commitment",
+      "source": "ERP",
+      "confidence": 1.0
+    },
+    {
+      "id": "SO-1002",
+      "type": "SalesOrder",
+      "label": "SO-1002",
+      "subtitle": "$3.9M commitment",
+      "source": "ERP",
+      "confidence": 1.0
+    },
+    {
+      "id": "SO-1003",
+      "type": "SalesOrder",
+      "label": "SO-1003",
+      "subtitle": "$1.86M commitment",
+      "source": "ERP",
+      "confidence": 1.0
+    },
+    {
+      "id": "CUST-ACME",
+      "type": "Customer",
+      "label": "Acme Industrial",
+      "subtitle": "Tier 1",
+      "source": "CRM",
+      "confidence": 0.98
+    },
+    {
+      "id": "CUST-PG",
+      "type": "Customer",
+      "label": "Procter & Gamble Co.",
+      "subtitle": "Tier 1",
+      "source": "CRM + Finance",
+      "confidence": 0.99,
+      "aliases": [
+        "P&G"
+      ]
+    },
+    {
+      "id": "CUST-MERCY",
+      "type": "Customer",
+      "label": "Mercy Health Systems",
+      "subtitle": "Tier 2",
+      "source": "CRM",
+      "confidence": 0.98
+    },
+    {
+      "id": "CON-ACME",
+      "type": "Contract",
+      "label": "Strategic Supply Agreement",
+      "subtitle": "10-day SLA",
+      "source": "Contract repository",
+      "confidence": 0.96
+    },
+    {
+      "id": "CON-PG",
+      "type": "Contract",
+      "label": "Global Filtration Supply Agreement",
+      "subtitle": "14-day SLA",
+      "source": "Contract repository",
+      "confidence": 0.96
+    },
+    {
+      "id": "ORG-ENGINEERING",
+      "type": "Organization",
+      "label": "Product Engineering",
+      "subtitle": "Morgan Ellis",
+      "source": "HRIS",
+      "confidence": 1.0
+    },
+    {
+      "id": "ORG-PROCUREMENT",
+      "type": "Organization",
+      "label": "Strategic Procurement",
+      "subtitle": "Jordan Chen",
+      "source": "HRIS",
+      "confidence": 1.0
+    },
+    {
+      "id": "METRIC-REV-FIN",
+      "type": "Metric",
+      "label": "Finance Revenue at Risk",
+      "subtitle": "Committed revenue",
+      "source": "Metric catalog",
+      "confidence": 0.99
+    },
+    {
+      "id": "METRIC-REV-SALES",
+      "type": "Metric",
+      "label": "Sales Revenue at Risk",
+      "subtitle": "Committed + pipeline",
+      "source": "Metric catalog",
+      "confidence": 0.99
+    },
+    {
+      "id": "POL-ALT-001",
+      "type": "Policy",
+      "label": "Alternate Part Approval",
+      "subtitle": "Engineering validation required",
+      "source": "Policy repository",
+      "confidence": 0.97
+    }
+  ],
+  "edges": [
+    {
+      "id": "E-001",
+      "source": "SUP-001",
+      "target": "SITE-NOVA-MTY",
+      "type": "OPERATES_SITE",
+      "label": "operates"
+    },
+    {
+      "id": "E-002",
+      "source": "SUP-001",
+      "target": "SITE-NOVA-QRO",
+      "type": "OPERATES_SITE",
+      "label": "operates"
+    },
+    {
+      "id": "E-003",
+      "source": "SITE-NOVA-MTY",
+      "target": "PART-1048",
+      "type": "SUPPLIES_PART",
+      "label": "supplies 100%"
+    },
+    {
+      "id": "E-004",
+      "source": "SITE-NOVA-MTY",
+      "target": "PART-2091",
+      "type": "SUPPLIES_PART",
+      "label": "supplies 70%"
+    },
+    {
+      "id": "E-005",
+      "source": "PART-1048",
+      "target": "PROD-ALPHA",
+      "type": "COMPONENT_OF",
+      "label": "component of"
+    },
+    {
+      "id": "E-006",
+      "source": "PART-1048",
+      "target": "PROD-BETA",
+      "type": "COMPONENT_OF",
+      "label": "component of"
+    },
+    {
+      "id": "E-007",
+      "source": "PART-2091",
+      "target": "PROD-BETA",
+      "type": "COMPONENT_OF",
+      "label": "component of"
+    },
+    {
+      "id": "E-008",
+      "source": "PART-2091",
+      "target": "PROD-GAMMA",
+      "type": "COMPONENT_OF",
+      "label": "component of"
+    },
+    {
+      "id": "E-009",
+      "source": "PROD-ALPHA",
+      "target": "PLANT-STL",
+      "type": "PRODUCED_AT",
+      "label": "produced at"
+    },
+    {
+      "id": "E-010",
+      "source": "PROD-BETA",
+      "target": "PLANT-DAL",
+      "type": "PRODUCED_AT",
+      "label": "produced at"
+    },
+    {
+      "id": "E-011",
+      "source": "PROD-GAMMA",
+      "target": "PLANT-CLE",
+      "type": "PRODUCED_AT",
+      "label": "produced at"
+    },
+    {
+      "id": "E-012",
+      "source": "PLANT-STL",
+      "target": "SO-1001",
+      "type": "FULFILLS_ORDER",
+      "label": "fulfills"
+    },
+    {
+      "id": "E-013",
+      "source": "PLANT-DAL",
+      "target": "SO-1002",
+      "type": "FULFILLS_ORDER",
+      "label": "fulfills"
+    },
+    {
+      "id": "E-014",
+      "source": "PLANT-CLE",
+      "target": "SO-1003",
+      "type": "FULFILLS_ORDER",
+      "label": "fulfills"
+    },
+    {
+      "id": "E-015",
+      "source": "SO-1001",
+      "target": "CUST-ACME",
+      "type": "PLACED_BY",
+      "label": "placed by"
+    },
+    {
+      "id": "E-016",
+      "source": "SO-1002",
+      "target": "CUST-PG",
+      "type": "PLACED_BY",
+      "label": "placed by"
+    },
+    {
+      "id": "E-017",
+      "source": "SO-1003",
+      "target": "CUST-MERCY",
+      "type": "PLACED_BY",
+      "label": "placed by"
+    },
+    {
+      "id": "E-018",
+      "source": "CUST-ACME",
+      "target": "CON-ACME",
+      "type": "GOVERNED_BY",
+      "label": "governed by"
+    },
+    {
+      "id": "E-019",
+      "source": "CUST-PG",
+      "target": "CON-PG",
+      "type": "GOVERNED_BY",
+      "label": "governed by"
+    },
+    {
+      "id": "E-020",
+      "source": "PART-1048",
+      "target": "POL-ALT-001",
+      "type": "CONSTRAINED_BY",
+      "label": "alternate constrained by"
+    },
+    {
+      "id": "E-021",
+      "source": "PART-1048",
+      "target": "ORG-ENGINEERING",
+      "type": "OWNED_BY",
+      "label": "validation owned by"
+    },
+    {
+      "id": "E-022",
+      "source": "SUP-001",
+      "target": "ORG-PROCUREMENT",
+      "type": "OWNED_BY",
+      "label": "relationship owned by"
+    },
+    {
+      "id": "E-023",
+      "source": "SO-1001",
+      "target": "METRIC-REV-FIN",
+      "type": "DEFINED_BY",
+      "label": "financial exposure"
+    },
+    {
+      "id": "E-024",
+      "source": "SO-1002",
+      "target": "METRIC-REV-SALES",
+      "type": "DEFINED_BY",
+      "label": "commercial exposure"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+opportunity_id,customer_name,product_id,stage,probability,expected_close_date,pipeline_value
+OPP-201,Meridian Processing,PROD-ALPHA,Commit,80,2026-08-21,2800000
+OPP-202,Globex Water,PROD-BETA,Best Case,60,2026-08-29,1200000
+OPP-203,Initech Medical,PROD-GAMMA,Commit,70,2026-09-04,1750000
+OPP-204,Central Utilities,PROD-DELTA,Pipeline,30,2026-10-15,900000

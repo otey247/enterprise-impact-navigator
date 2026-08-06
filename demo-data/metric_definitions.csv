@@ -1,0 +1,5 @@
+metric_id,metric_name,department,definition,formula,decision_context,owner_org_id
+METRIC-REV-FIN,Revenue at Risk,Finance,Confirmed customer revenue due within the disruption horizon for products that depend on constrained parts,SUM committed_revenue for affected confirmed orders within horizon,Executive financial exposure,ORG-OPS-CENTRAL
+METRIC-REV-SALES,Revenue at Risk,Sales,Finance revenue at risk plus qualified opportunity pipeline for affected products,SUM committed_revenue plus qualified pipeline_value,Commercial relationship exposure,ORG-COMMERCIAL
+METRIC-MARGIN,Gross Margin at Risk,Finance,Gross margin associated with affected confirmed orders,SUM gross_margin for affected orders,Profitability exposure,ORG-OPS-CENTRAL
+METRIC-PENALTY,Contractual Penalty Exposure,Legal,Maximum contractual penalty for affected confirmed orders,SUM penalty_exposure for affected orders,Contract and legal prioritization,ORG-LEGAL
