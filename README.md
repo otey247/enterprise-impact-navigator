@@ -6,6 +6,32 @@ The primary demonstration question is:
 
 > If Nova Components' Monterrey facility is unavailable for 30 days, which products, plants, customer commitments, contracts, revenue, and owners are affected, and what should we do next?
 
+## Screenshots
+
+### Overview
+
+Fragmented source systems, ontology coverage, and the five-stage governance pipeline.
+
+![Overview](docs/screenshots/01-overview.png)
+
+### Impact Explorer
+
+The 30-day supplier disruption scenario with governed measures, decision summary, and the impact dependency graph.
+
+![Impact Explorer](docs/screenshots/02-impact-explorer.png)
+
+### Ontology
+
+The enterprise semantic model, with provenance, confidence, aliases, and relationships for the selected node.
+
+![Ontology](docs/screenshots/03-ontology.png)
+
+### Mapping Workbench
+
+Human-in-the-loop entity resolution showing evidence, confidence, and risk for each proposed mapping.
+
+![Mapping Workbench](docs/screenshots/04-mapping-workbench.png)
+
 ## Included
 
 - Dependency-free Node.js server and browser application
