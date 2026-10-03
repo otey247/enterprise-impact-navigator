@@ -10,27 +10,27 @@ The primary demonstration question is:
 
 ### Overview
 
-Fragmented source systems, ontology coverage, and the five-stage governance pipeline.
+Source, entity, and review counts, with example questions to start from.
 
 ![Overview](docs/screenshots/01-overview.png)
 
 ### Impact Explorer
 
-The 30-day supplier disruption scenario with governed measures, decision summary, and the impact dependency graph.
+The 30-day supplier disruption: exposure numbers, summary, and impact graph.
 
 ![Impact Explorer](docs/screenshots/02-impact-explorer.png)
 
 ### Ontology
 
-The enterprise semantic model, with provenance, confidence, aliases, and relationships for the selected node.
+Entities and relationships, with details for the selected entity.
 
 ![Ontology](docs/screenshots/03-ontology.png)
 
-### Mapping Workbench
+### Mappings
 
-Human-in-the-loop entity resolution showing evidence, confidence, and risk for each proposed mapping.
+Source values matched to entities, with evidence, confidence, and risk for each match.
 
-![Mapping Workbench](docs/screenshots/04-mapping-workbench.png)
+![Mappings](docs/screenshots/04-mapping-workbench.png)
 
 ## Included
 
@@ -118,3 +118,4 @@ See `docs/DEMO-SCRIPT.md`.
 - `docs/DEMO-SCRIPT.md`
 - `docs/DATA-DICTIONARY.md`
 - `docs/AI-STUDIO-SETUP.md`
+- `DESIGN.md` (UI copy rules)

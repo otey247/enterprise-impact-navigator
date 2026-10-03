@@ -39,6 +39,11 @@ export function titleCase(value) {
   return String(value || '').replaceAll('_', ' ').replace(/\b\w/g, (match) => match.toUpperCase());
 }
 
+export function humanizeType(value) {
+  const text = String(value || '').replaceAll('_', ' ').replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 export function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');

@@ -1,4 +1,4 @@
-import { escapeHtml } from './utils.js';
+import { escapeHtml, humanizeType } from './utils.js';
 import { icon } from './icons.js';
 
 const TYPE_COLUMNS = {
@@ -88,7 +88,7 @@ export function graphMarkup({ ontology, focusNodeIds = [], focusEdgeIds = [], se
       <g class="graph-node ${focused ? 'focus' : ''} ${selected ? 'selected' : ''}" data-node-id="${escapeHtml(node.id)}" transform="translate(${position.x} ${position.y})" tabindex="0" role="button" aria-label="Inspect ${escapeHtml(node.label)}">
         <circle r="33"></circle>
         <text class="node-label" y="-2">${escapeHtml(truncate(node.label))}</text>
-        <text class="node-type" y="14">${escapeHtml(node.type)}</text>
+        <text class="node-type" y="14">${escapeHtml(humanizeType(node.type))}</text>
       </g>
     `;
   }).join('');
@@ -117,22 +117,24 @@ export function graphMarkup({ ontology, focusNodeIds = [], focusEdgeIds = [], se
 
 export function entityInspectorMarkup(node, ontology) {
   if (!node) {
-    return `<div class="inspector-empty">Select an entity to inspect its canonical definition, source, confidence, aliases, and relationships.</div>`;
+    return `<div class="inspector-empty">Select an entity to see its details.</div>`;
   }
   const outgoing = ontology.edges.filter((edge) => edge.source === node.id);
   const incoming = ontology.edges.filter((edge) => edge.target === node.id);
   const relationships = [...outgoing, ...incoming];
+  const labelFor = (id) => ontology.nodes.find((item) => item.id === id)?.label || id;
+  const none = 'None';
   return `
     <div class="inspector-content">
-      <div class="inspector-type">${escapeHtml(node.type)}</div>
+      <div class="inspector-type">${escapeHtml(humanizeType(node.type))}</div>
       <h3>${escapeHtml(node.label)}</h3>
-      <div class="inspector-subtitle">${escapeHtml(node.subtitle || 'Canonical enterprise entity')}</div>
+      ${node.subtitle ? `<div class="inspector-subtitle">${escapeHtml(node.subtitle)}</div>` : ''}
       <div class="detail-list">
-        <div class="detail-item"><div class="detail-label">Canonical ID</div><div class="detail-value">${escapeHtml(node.id)}</div></div>
-        <div class="detail-item"><div class="detail-label">System of record</div><div class="detail-value">${escapeHtml(node.source || 'Ontology catalog')}</div></div>
+        <div class="detail-item"><div class="detail-label">ID</div><div class="detail-value">${escapeHtml(node.id)}</div></div>
+        <div class="detail-item"><div class="detail-label">Source system</div><div class="detail-value">${escapeHtml(node.source || 'Not listed')}</div></div>
         <div class="detail-item"><div class="detail-label">Confidence</div><div class="detail-value">${Math.round(Number(node.confidence || 0) * 100)}%</div></div>
-        <div class="detail-item"><div class="detail-label">Known aliases</div><div class="detail-value">${node.aliases?.length ? node.aliases.map(escapeHtml).join(', ') : 'No registered aliases'}</div></div>
-        <div class="detail-item"><div class="detail-label">Relationships</div><div class="detail-value">${relationships.length ? relationships.map((edge) => escapeHtml(`${edge.type}: ${edge.source === node.id ? edge.target : edge.source}`)).join('<br>') : 'No connected relationships'}</div></div>
+        <div class="detail-item"><div class="detail-label">Also known as</div><div class="detail-value">${node.aliases?.length ? node.aliases.map(escapeHtml).join(', ') : none}</div></div>
+        <div class="detail-item"><div class="detail-label">Relationships</div><div class="detail-value">${relationships.length ? relationships.map((edge) => escapeHtml(`${humanizeType(edge.type)}: ${labelFor(edge.source === node.id ? edge.target : edge.source)}`)).join('<br>') : none}</div></div>
       </div>
     </div>
   `;

@@ -4,29 +4,25 @@
       "id": "supplier-disruption-30",
       "title": "30-day supplier disruption",
       "description": "Monterrey site unavailable for 30 days",
-      "prompt": "If Nova Components' Monterrey facility is unavailable for 30 days, what is our exposure?",
-      "category": "Supply continuity"
+      "prompt": "If Nova Components' Monterrey facility is unavailable for 30 days, what is our exposure?"
     },
     {
       "id": "metric-conflict",
       "title": "Why do Sales and Finance disagree?",
-      "description": "Compare department-specific revenue-at-risk definitions",
-      "prompt": "Why does Sales report more revenue at risk than Finance?",
-      "category": "Semantic reconciliation"
+      "description": "Compare revenue at risk in Sales and Finance",
+      "prompt": "Why does Sales report more revenue at risk than Finance?"
     },
     {
       "id": "single-source-exposure",
       "title": "Single-source commitments",
-      "description": "Find commitments dependent on parts without an approved full-capacity alternate",
-      "prompt": "Which strategic customer commitments depend on single-source parts?",
-      "category": "Dependency risk"
+      "description": "Commitments that depend on single-source parts",
+      "prompt": "Which strategic customer commitments depend on single-source parts?"
     },
     {
       "id": "supplier-disruption-60",
-      "title": "60-day disruption stress test",
-      "description": "Extend the same disruption to 60 days",
-      "prompt": "What changes if the Monterrey disruption lasts 60 days?",
-      "category": "Scenario planning"
+      "title": "60-day supplier disruption",
+      "description": "Same outage, twice as long",
+      "prompt": "What changes if the Monterrey disruption lasts 60 days?"
     }
   ]
 }
