@@ -161,19 +161,23 @@ function supplierDisruptionReport(question, durationDays) {
     ontology_version: data.ontology.version,
     severity: durationDays >= 60 ? 'Critical' : 'High',
     metrics: [
-      { id: 'finance-revenue', label: 'Finance revenue at risk', value: money(financeRevenue), format: 'currency', definition_id: 'METRIC-REV-FIN', context: 'Confirmed orders within horizon' },
-      { id: 'sales-exposure', label: 'Sales exposure', value: money(salesExposure), format: 'currency', definition_id: 'METRIC-REV-SALES', context: 'Confirmed revenue plus qualified pipeline' },
-      { id: 'gross-margin', label: 'Gross margin at risk', value: money(grossMargin), format: 'currency', definition_id: 'METRIC-MARGIN', context: 'Margin on affected confirmed orders' },
-      { id: 'penalty', label: 'Contract penalty exposure', value: money(penalty), format: 'currency', definition_id: 'METRIC-PENALTY', context: 'Maximum contractual exposure' },
-      { id: 'orders', label: 'Confirmed orders affected', value: affectedOrders.length, format: 'number', context: 'Within disruption horizon' },
-      { id: 'customers', label: 'Customers affected', value: unique(affectedOrders.map((order) => order.customer_id)).length, format: 'number', context: 'Distinct customer accounts' }
+      { id: 'finance-revenue', label: 'Finance revenue at risk', value: money(financeRevenue), format: 'currency', definition_id: 'METRIC-REV-FIN', context: 'Confirmed orders only' },
+      { id: 'sales-exposure', label: 'Sales exposure', value: money(salesExposure), format: 'currency', definition_id: 'METRIC-REV-SALES', context: 'Confirmed orders plus pipeline' },
+      { id: 'gross-margin', label: 'Gross margin at risk', value: money(grossMargin), format: 'currency', definition_id: 'METRIC-MARGIN' },
+      { id: 'penalty', label: 'Contract penalty exposure', value: money(penalty), format: 'currency', definition_id: 'METRIC-PENALTY' },
+      { id: 'orders', label: 'Confirmed orders affected', value: affectedOrders.length, format: 'number' },
+      { id: 'customers', label: 'Customers affected', value: unique(affectedOrders.map((order) => order.customer_id)).length, format: 'number' }
     ],
     constrained_parts: constrainedSummary,
     affected_orders: enrichedOrders,
     evidence_paths: evidencePaths,
     definitions_used: data.metricDefinitions.filter((definition) =>
       ['METRIC-REV-FIN', 'METRIC-REV-SALES', 'METRIC-MARGIN', 'METRIC-PENALTY'].includes(definition.metric_id)
-    ),
+    ).map((definition) => ({
+      ...definition,
+      owner: data.organizations.find((row) => row.org_id === definition.owner_org_id)?.org_name || definition.owner_org_id,
+      scope: definition.decision_context
+    })),
     assumptions: [
       `The disruption begins on the demonstration date, 2026-08-06, and lasts ${durationDays} calendar days.`,
       'Inventory coverage values are current as of 2026-08-05 and are assumed available for the listed plants.',
@@ -204,7 +208,7 @@ function metricConflictReport(question) {
     ...base,
     scenario_id: 'metric-conflict',
     severity: 'Medium',
-    direct_answer: `Both values are correct within their governed contexts. Finance reports ${displayMoney(finance)} because it counts confirmed customer revenue due within the disruption horizon. Sales reports ${displayMoney(sales)} because it adds ${displayMoney(difference)} of qualified pipeline for affected products. Use the Finance definition for booked financial exposure and the Sales definition for commercial relationship planning.`,
+    direct_answer: `Both values are correct. Finance reports ${displayMoney(finance)} because it counts confirmed customer revenue due within the disruption horizon. Sales reports ${displayMoney(sales)} because it adds ${displayMoney(difference)} of qualified pipeline for affected products. Use the Finance definition for booked financial exposure and the Sales definition for commercial relationship planning.`,
     metrics: [
       { id: 'finance-revenue', label: 'Finance definition', value: money(finance), format: 'currency', definition_id: 'METRIC-REV-FIN', context: 'Confirmed orders only' },
       { id: 'sales-exposure', label: 'Sales definition', value: money(sales), format: 'currency', definition_id: 'METRIC-REV-SALES', context: 'Confirmed orders plus pipeline' },
@@ -232,7 +236,7 @@ function singleSourceReport(question) {
     direct_answer: `${singleSource.map((part) => part.part_name).join(', ')} creates the largest single-source exposure. It supports ${productIds.length} products and ${orders.length} confirmed customer commitments representing ${displayMoney(revenue)} within the next 30 days. The available alternate is still pending engineering validation.`,
     metrics: [
       { id: 'single-source-parts', label: 'Single-source parts', value: singleSource.length, format: 'number', context: 'No approved full-capacity alternate' },
-      { id: 'dependent-products', label: 'Dependent products', value: productIds.length, format: 'number', context: 'Products using exposed parts' },
+      { id: 'dependent-products', label: 'Dependent products', value: productIds.length, format: 'number' },
       { id: 'dependent-orders', label: 'Dependent orders', value: orders.length, format: 'number', context: 'Confirmed orders within 30 days' },
       { id: 'dependent-revenue', label: 'Dependent revenue', value: money(revenue), format: 'currency', context: 'Confirmed customer commitments' }
     ],

@@ -7,17 +7,15 @@ import { downloadBlob } from './js/utils.js';
 const main = document.querySelector('#main-content');
 const nav = document.querySelector('#primary-nav');
 const pageTitle = document.querySelector('#page-title');
-const pageEyebrow = document.querySelector('#page-eyebrow');
-const capabilityStatus = document.querySelector('#capability-status');
 const commandButton = document.querySelector('#command-button');
 const toastRegion = document.querySelector('#toast-region');
 
-const viewMeta = {
-  overview: ['Overview', 'ENTERPRISE DECISION INTELLIGENCE'],
-  impact: ['Impact Explorer', 'GOVERNED SCENARIO ANALYSIS'],
-  ontology: ['Ontology', 'ENTERPRISE SEMANTIC MODEL'],
-  mappings: ['Mapping Workbench', 'HUMAN-IN-THE-LOOP GOVERNANCE'],
-  sources: ['Source Catalog', 'EVIDENCE AND PROVENANCE']
+const viewTitles = {
+  overview: 'Overview',
+  impact: 'Impact Explorer',
+  ontology: 'Ontology',
+  mappings: 'Mappings',
+  sources: 'Sources'
 };
 
 const navItems = [
@@ -47,29 +45,15 @@ function renderNavigation() {
   nav.querySelectorAll('[data-nav-view]').forEach((button) => button.addEventListener('click', () => navigate(button.dataset.navView)));
 }
 
-function renderCapabilities() {
-  if (!state.bootstrap) {
-    capabilityStatus.innerHTML = '';
-    return;
-  }
-  const capabilities = state.bootstrap.capabilities;
-  capabilityStatus.innerHTML = `
-    <span class="capability-pill"><span class="status-dot"></span>Ontology ready</span>
-    <span class="capability-pill ${capabilities.managed_agent ? '' : 'off'}"><span class="status-dot"></span>Managed Agent ${capabilities.managed_agent ? 'ready' : 'optional'}</span>
-  `;
-}
-
 function injectTopbarIcons() {
   commandButton.querySelector('[data-icon="search"]')?.replaceWith(document.createRange().createContextualFragment(icon('search')));
 }
 
 function render() {
-  const [title, eyebrow] = viewMeta[state.activeView] || viewMeta.overview;
+  const title = viewTitles[state.activeView] || viewTitles.overview;
   pageTitle.textContent = title;
-  pageEyebrow.textContent = eyebrow;
-  document.title = `${title} | Enterprise Impact Navigator`;
+  document.title = `${title} | Impact Navigator`;
   renderNavigation();
-  renderCapabilities();
   if (state.bootstrap) document.querySelector('#sidebar-version').textContent = state.bootstrap.ontology.version;
   main.innerHTML = renderActiveView(state);
   bindView(main, state, actions);
@@ -94,17 +78,17 @@ function showLoading(useManagedAgent) {
   overlay.className = 'loading-overlay';
   overlay.innerHTML = `
     <div class="loading-card" role="status">
-      <div class="loading-title">Analyzing enterprise impact</div>
-      <div class="loading-step" data-loading-step>Resolving canonical entities and definitions</div>
+      <div class="loading-title">Analyzing impact</div>
+      <div class="loading-step" data-loading-step>Finding affected suppliers and parts</div>
       <div class="loading-bar"></div>
     </div>
   `;
   document.body.appendChild(overlay);
   const steps = [
-    'Resolving canonical entities and definitions',
-    'Traversing supplier, product, order, and contract relationships',
-    'Calculating governed impact metrics',
-    useManagedAgent ? 'Requesting Managed Agent synthesis' : 'Building evidence paths and recommendations'
+    'Finding affected suppliers and parts',
+    'Matching orders and contracts',
+    'Calculating exposure',
+    useManagedAgent ? 'Asking Gemini' : 'Preparing recommendations'
   ];
   let index = 0;
   const timer = setInterval(() => {
@@ -121,7 +105,7 @@ function showLoading(useManagedAgent) {
 async function analyze(question, scenarioId = state.selectedScenarioId) {
   const cleanQuestion = String(question || '').trim();
   if (!cleanQuestion) {
-    showToast('Question required', 'Enter a business question to analyze.');
+    showToast('Enter a question', 'Type something to analyze.');
     return;
   }
   updateState({ question: cleanQuestion, selectedScenarioId: scenarioId, activeView: 'impact' });
@@ -140,9 +124,9 @@ async function analyze(question, scenarioId = state.selectedScenarioId) {
       selectedNodeId: result.report.graph_focus?.node_ids?.[0] || null
     });
     if (result.execution?.warning) {
-      showToast('Managed Agent fallback', result.execution.warning);
+      showToast('Gemini unavailable', result.execution.warning);
     } else {
-      showToast('Analysis complete', `${result.report.metrics.length} governed measures and ${result.report.evidence_paths.length} evidence paths generated.`);
+      showToast('Analysis complete', `${result.report.metrics.length} measures and ${result.report.evidence_paths.length} evidence paths.`);
     }
   } catch (error) {
     showToast('Analysis failed', error.message);
@@ -163,7 +147,7 @@ async function exportReport(type) {
     if (result instanceof Blob) {
       const extension = type === 'brief' ? 'txt' : 'csv';
       downloadBlob(result, `enterprise-impact-${type}-${state.report.scenario_id}.${extension}`);
-      showToast('Export created', `${type === 'brief' ? 'Decision brief' : 'Mitigation tracker'} downloaded locally.`);
+      showToast('Downloaded', `${type === 'brief' ? 'Decision brief' : 'Mitigation tracker'} saved.`);
       return;
     }
     if (result.url) {
@@ -172,7 +156,7 @@ async function exportReport(type) {
       anchor.target = '_blank';
       anchor.rel = 'noopener noreferrer';
       anchor.click();
-      showToast('Google Workspace artifact created', `The ${result.mode === 'google-doc' ? 'Google Doc' : 'Google Sheet'} opened in a new tab.`);
+      showToast(`Created in Google ${result.mode === 'google-doc' ? 'Docs' : 'Sheets'}`, 'Opened in a new tab.');
     }
   } catch (error) {
     showToast('Export failed', error.message);
@@ -181,7 +165,7 @@ async function exportReport(type) {
 
 function selectNode(nodeId) {
   if (!state.bootstrap.ontology.nodes.some((node) => node.id === nodeId)) {
-    showToast('Entity not in demo graph', `${nodeId} is referenced by the operational data but is not included in this compact ontology snapshot.`);
+    showToast('Not in the graph', `${nodeId} isn't part of the demo graph.`);
     return;
   }
   updateState({ selectedNodeId: nodeId });
@@ -189,7 +173,7 @@ function selectNode(nodeId) {
 
 function mappingDecision(mappingId, decision) {
   saveMappingDecision(mappingId, decision);
-  showToast(`Mapping ${decision.toLowerCase()}`, `${mappingId} is stored in this browser as a demonstration governance decision.`);
+  showToast(`Mapping ${decision.toLowerCase()}`, 'Saved in this browser.');
 }
 
 const actions = {
@@ -214,14 +198,14 @@ function openCommandPalette() {
   dialog.className = 'command-dialog';
   dialog.dataset.commandDialog = '';
   dialog.innerHTML = `
-    <div class="command-box" role="dialog" aria-modal="true" aria-label="Ask an enterprise question">
+    <div class="command-box" role="dialog" aria-modal="true" aria-label="Ask a question">
       <form data-command-form>
-        <div class="command-input-wrap">${icon('search')}<input name="question" aria-label="Enterprise question" placeholder="Ask about enterprise impact, dependencies, or metric definitions" autocomplete="off" /></div>
+        <div class="command-input-wrap">${icon('search')}<input name="question" aria-label="Question" placeholder="Ask a question" autocomplete="off" /></div>
       </form>
       <div class="command-scenarios">
         ${state.bootstrap.scenarios.map((scenario) => `
           <button class="command-scenario" type="button" data-command-scenario="${scenario.id}">
-            <span class="command-scenario-title">${scenario.title}</span><span class="command-scenario-category">${scenario.category}</span>
+            <span class="command-scenario-title">${scenario.title}</span>
           </button>
         `).join('')}
       </div>
@@ -267,8 +251,8 @@ async function initialize() {
       useManagedAgent: Boolean(bootstrap.capabilities.managed_agent)
     });
   } catch (error) {
-    main.innerHTML = `<section class="panel empty-state">${icon('alert')}<h2>Application initialization failed</h2><p>${error.message}</p></section>`;
-    showToast('Initialization failed', error.message, 8000);
+    main.innerHTML = `<section class="panel empty-state">${icon('alert')}<h2>Couldn't load the app</h2><p>${error.message}</p></section>`;
+    showToast("Couldn't load the app", error.message, 8000);
   }
 }
 
